@@ -1,34 +1,22 @@
 import React, {Component} from 'react'
 import Table from './Table'
-import Form from './Form'
+import {Header} from './components/Static'
+import {HubForm} from './components/Forms'
+
 
 class App extends Component {
   state = {
-      characters: [],
+      hubs: [],
   }
 
-  removeCharacter = (index) => {
-    const {characters} = this.state
-  
-    this.setState({
-      characters: characters.filter((character, i) => {
-        return i !== index
-      }),
-    })
-  }
-
-  handleSubmit = (character) => {
-    this.setState({characters: [...this.state.characters, character]})
-  }
-
+  setHubs = (hubs) => this.setState({hubs: hubs})
 
   render() {
-    
-    
       return (
         <div className="container">
-          <Table characterData={this.state.characters} removeCharacter={this.removeCharacter} />
-          <Form handleSubmit={this.handleSubmit} />
+          <Header text="Дашборд" />
+          <HubForm setAppHubs={this.setHubs} />
+          <Table />
         </div>
       )
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button} from './UiElements'
+import {Button} from './components/Buttons'
 
 
 const TableHeader = () => {
@@ -36,8 +36,8 @@ const Table = (props) => {
   
     return (
       <table>
-        <TableHeader />
-        <TableBody characterData={characterData} removeCharacter={removeCharacter} />
+        {/* <TableHeader /> */}
+        {/* <TableBody characterData={characterData} removeCharacter={removeCharacter} /> */}
       </table>
     )
   }
