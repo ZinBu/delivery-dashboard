@@ -8,8 +8,8 @@ const TableHeader = () => {
             <th className="short-column" >Номер заказа</th>
             <th className="short-column" >Вес корзины (кг)</th>
             <th className="short-column" >Штук/SKU</th>
-            <th >Курьер/КПП</th>
             <th >Пикер/КПП</th>
+            <th >Курьер/КПП</th>
             <th >Начало сборки</th>
             <th >Конец сборки</th>
             <th >Время выхода курьера</th>
@@ -40,10 +40,10 @@ const TableBody = props => {
               <td >{order.reserveKey}</td> 
               <td >{order.basketWeight}</td>
               <td >{order.itemsCount}/{order.skuCount}</td>
+              <td >{order.pickerName} / {order.pickerKpp}</td>
               <td >
                 {order.isTaxi ? setCourierData(order) : `${order.courierName} / ${order.courierKpp}`}   
               </td>
-              <td >{order.pickerName} / {order.pickerKpp}</td>
               <td >{order.complectationBegin}</td>
               <td >{order.complectationEnd}</td>
               <td >{order.deliveringBegin}</td>

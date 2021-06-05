@@ -52,7 +52,7 @@ export class HubForm extends Component {
 
   updateButtonClicks = () => {
     // Check clicks count in a row for a 3 second interval
-    if (this.state.buttonClickCount == 0) {
+    if (this.state.buttonClickCount === 0) {
       setTimeout(() => this.setState({buttonClickCount: 0}), 3000)
     }
     this.setState({buttonClickCount: this.state.buttonClickCount + 1})
