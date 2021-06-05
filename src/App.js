@@ -26,8 +26,8 @@ class App extends Component {
       return (
         <div className="container">
           <Header text="Дашборд" />
-          <HubForm setAppHubData={this.setHubData} />
           <InfoLabel text={this.state.labelText}/>
+          <HubForm setAppHubData={this.setHubData} />
           <Table hubData={this.state.hubData} />
         </div>
       )
