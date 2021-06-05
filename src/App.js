@@ -6,7 +6,8 @@ import {HubForm} from './components/Forms'
 
 const InfoLabel = (props) => {
   const visibility = {"visibility": props.visible ? "visible" : "hidden"}
-  return <div id="info-label" className="info-label fadeIn" style={visibility}><p className="info-label-p">{props.text}</p></div>
+  const cls = `info-label ${props.visible ? "fadeIn" : "fadeOut"}`
+  return <div className={cls} style={visibility}><p className="info-label-p">{props.text}</p></div>
 }
 
 

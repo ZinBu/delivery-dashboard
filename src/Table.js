@@ -1,5 +1,4 @@
 import React from 'react'
-import {Button} from './components/Buttons'
 
 
 const TableHeader = () => {
@@ -62,9 +61,10 @@ const TableBody = (props) => {
 
 const Table = (props) => {
     const {hubData} = props
+    const tableVisibilityStyle = hubData.length < 1 ? {"visibility": "hidden"}: null
 
     return (
-      <table style={hubData.length < 1 ? {"visibility": "hidden"}: null}>
+      <table style={tableVisibilityStyle}>
         <TableHeader />
         <TableBody hubData={hubData} />
       </table>

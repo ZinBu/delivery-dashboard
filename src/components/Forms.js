@@ -17,7 +17,7 @@ export class HubForm extends Component {
   state = {
     hubs: [],
     selectedHubId: null,
-    buttonDisabled: false
+    buttonDisabled: true
   }
 
   componentDidMount() {
@@ -42,8 +42,10 @@ export class HubForm extends Component {
   }
 
   handleFormChange = (event) => {
+    const value = event.target.value
     this.setState({
-      selectedHubId: event.target.value,
+      selectedHubId: value,
+      buttonDisabled: !value ? true : false
     })
   }
 
