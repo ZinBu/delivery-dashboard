@@ -382,6 +382,35 @@
     font-size: 1rem;
   }
   
+  @keyframes fadeIn {
+    0% {opacity: 0.2;}
+    50% {opacity: 0.5;}
+    100% {opacity: 1;}
+  }
+  
+  @keyframes fadeOut {
+    0% {opacity: 1;}
+    50% {opacity: 0.5;}
+    100% {opacity: 0.2;}
+  }
+  
+  .fadeIn {
+    animation: fadeIn 1s ease-in-out
+   }
+  
+  .info-label {
+    background: #0040ff69;
+    height: 30px;
+    border-radius: 5px;
+  }
+
+  .info-label-p {
+    color: #333;
+    padding: 0.2em;
+    padding-left: 1em;
+    vertical-align: middle;
+}
+
   p,
   ol,
   ul,
