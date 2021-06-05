@@ -32,11 +32,11 @@ const TableBody = (props) => {
 
 
 const Table = (props) => {
-    const {characterData, removeCharacter} = props
-  
+    const {hubData} = props
+
     return (
-      <table>
-        {/* <TableHeader /> */}
+      <table style={hubData.length < 1 ? {"visibility": "hidden"}: null}>
+        <TableHeader />
         {/* <TableBody characterData={characterData} removeCharacter={removeCharacter} /> */}
       </table>
     )

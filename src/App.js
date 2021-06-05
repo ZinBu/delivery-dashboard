@@ -4,19 +4,31 @@ import {Header} from './components/Static'
 import {HubForm} from './components/Forms'
 
 
+const InfoLabel = (props) => <p style={{"color": "blue"}}>{props.text}</p>
+
+
 class App extends Component {
   state = {
-      hubs: [],
+      hubData: [],
+      labelText: null
   }
 
-  setHubs = (hubs) => this.setState({hubs: hubs})
+  setHubData = (hubData) => {
+    this.setState({hubData: hubData})
+    if (!hubData || hubData.length < 1) {
+      this.setState({labelText: "Нет данных!"})
+    } else {
+      this.setState({labelText: null})
+    }
+  }
 
   render() {
       return (
         <div className="container">
           <Header text="Дашборд" />
-          <HubForm setAppHubs={this.setHubs} />
-          <Table />
+          <HubForm setAppHubData={this.setHubData} />
+          <InfoLabel text={this.state.labelText}/>
+          <Table hubData={this.state.hubData} />
         </div>
       )
   }
