@@ -17,7 +17,8 @@ export class HubForm extends Component {
   state = {
     hubs: [],
     selectedHubId: null,
-    buttonDisabled: true
+    buttonDisabled: true,
+    buttonClickCount: 0
   }
 
   componentDidMount() {
@@ -41,7 +42,7 @@ export class HubForm extends Component {
       }).catch(error => console.log(error))
   }
 
-  handleFormChange = (event) => {
+  handleFormChange = event => {
     const value = event.target.value
     this.setState({
       selectedHubId: value,
@@ -49,7 +50,25 @@ export class HubForm extends Component {
     })
   }
 
+  updateButtonClicks = () => {
+    // Check clicks count in a row for a 3 second interval
+    if (this.state.buttonClickCount == 0) {
+      setTimeout(() => this.setState({buttonClickCount: 0}), 3000)
+    }
+    this.setState({buttonClickCount: this.state.buttonClickCount + 1})
+    return this.state.buttonClickCount
+  }
+
   requestHubInfo = () => {
+    const clickCount = this.updateButtonClicks()
+    if (clickCount >= 2) {
+      // It means the third click
+      this.props.raiseLabel("Прими таблетки!", 4000)
+      this.setState({buttonDisabled: true})
+      setTimeout(() => this.setState({buttonDisabled: false}), 4000)
+      return 
+    }
+
     if (!this.state.selectedHubId) {
       return
     }

@@ -21,9 +21,13 @@ class App extends Component {
   setHubData = (hubData) => {
     this.setState({hubData: hubData})
     if (!hubData || hubData.length < 1) {
-      this.setState({labelText: "Нет данных!", labelVisible: true})
-      setTimeout(() => this.setState({labelText: null, labelVisible: false}), 2000)
+      this.raiseLabel("Нет данных!")
     }
+  }
+
+  raiseLabel = (text, showTime = 2000) => {
+    this.setState({labelText: text, labelVisible: true})
+    setTimeout(() => this.setState({labelText: null, labelVisible: false}), showTime)
   }
 
   render() {
@@ -31,7 +35,7 @@ class App extends Component {
         <div className="container">
           <Header text="Дашборд" />
           <InfoLabel visible={this.state.labelVisible}  text={this.state.labelText}/>
-          <HubForm setAppHubData={this.setHubData} />
+          <HubForm setAppHubData={this.setHubData} raiseLabel={this.raiseLabel}/>
           <Table hubData={this.state.hubData} />
         </div>
       )
