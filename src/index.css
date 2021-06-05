@@ -396,11 +396,9 @@
   }
   
   @keyframes fadeInOut {
-    0% {opacity: 0.2;}
-    25% {opacity: 0.5;}
-    50% {opacity: 1;}
-    75% {opacity: 0.5;}
-    100% {opacity: 0.2;}
+    0% {background-color: rgb(3 102 238 / 7%);}
+    50% {background-color: rgb(3 102 238 / 30%);}
+    100% {background-color: rgb(3 102 238 / 7%);}
   }
   
   .fadeIn {
@@ -412,7 +410,7 @@
    }
   
    .fadeInOut {
-    animation: fadeInOut 2s ease-in-out
+    animation: fadeInOut 4s ease-in-out infinite
    }
   
   .info-label {
@@ -427,6 +425,11 @@
     padding-left: 1em;
     vertical-align: middle;
 }
+
+tr:hover {
+  background-position: 0 0;
+  background: rgb(3 214 238 / 18%);
+  }
 
   p,
   ol,

@@ -22,33 +22,32 @@ const TableHeader = () => {
   }
 
 
-const TableBody = (props) => {
-    const setCourierData = (order) => {
-      const taxiDriver = (
-        `${order.provider || '-'}
-        ID: ${order.claim_id || '-'}
-        Авто: ${order.car_model || '-'}
-        №: ${order.car_number || '-'}
-        Статус: ${order.extra.provider_status || '-'}
-        `
-      )
-      return taxiDriver
+const TableBody = props => {
+    const setCourierData = order => {
+      const taxiDriver = [
+        `${order.provider || '-'}`,
+        `ID: ${order.claim_id || '-'}`,
+        `Авто: ${order.car_model || '-'}`,
+        `№: ${order.car_number || '-'}`,
+        `Статус: ${order.extra.provider_status || '-'}`
+      ]
+      return taxiDriver.map((el, index) => <div key={index}>{el}</div>)
     }
     
     const rows = props.hubData.map((order, index) => {
         return (
-            <tr key={index} style={order.isTaxi ? {"backgroundColor": "rgb(13 60 230 / 32%)"} : null}>
+            <tr key={index} className={order.isTaxi ? "fadeInOut": ""} style={order.isTaxi ? {"backgroundColor": "rgb(13 60 230 / 32%)"} : null}>
               <td >{order.reserveKey}</td> 
               <td >{order.basketWeight}</td>
               <td >{order.itemsCount}/{order.skuCount}</td>
               <td >
                 {order.isTaxi ? setCourierData(order) : `${order.courierName} / ${order.courierKpp}`}   
               </td>
-              <td >{order.pickerName}/{order.pickerKpp}</td>
+              <td >{order.pickerName} / {order.pickerKpp}</td>
               <td >{order.complectationBegin}</td>
               <td >{order.complectationEnd}</td>
               <td >{order.deliveringBegin}</td>
-              <td >{order.clientArrival_time}</td>
+              <td >{order.clientArrivalTime}</td>
               <td >{order.deliveringEnd || '-'}</td>
               <td >{order.state}</td>
             </tr>
