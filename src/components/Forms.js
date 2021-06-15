@@ -73,7 +73,7 @@ export class HubForm extends Component {
       return
     }
 
-    const url = `http://127.0.0.1:8000/dashboard_api/${this.state.selectedHubId}/`
+    const url = `http://127.0.0.1:8000/Dashboard/table/${this.state.selectedHubId}/`
     this.setState({buttonDisabled: true})
     
     const fetchParams = {
