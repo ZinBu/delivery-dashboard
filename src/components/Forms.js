@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Button} from './Buttons'
 import {authHeaderValue} from '../Settings' 
+import {hubRes, hubList} from '../Dataset'
 
 
 const Options = (props) => {
@@ -30,7 +31,7 @@ export class HubForm extends Component {
       }
     }
     fetch(url, fetchParams)
-      .then((result) => result.json())
+      .then((result) => hubList)
       .then((result) => {
         this.setState({
           hubs: result.hubs.map(
@@ -82,7 +83,7 @@ export class HubForm extends Component {
       }
     }
     fetch(url, fetchParams)
-      .then(result => result.json())
+      .then(result => this.state.selectedHubId === 1 ? hubRes : result.json())
       .then(result => this.props.setAppHubData(result))
       .catch(error => console.log(error))
       .finally(() => this.setState({buttonDisabled: false}))
