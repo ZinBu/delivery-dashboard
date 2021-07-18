@@ -1,0 +1,60 @@
+
+body {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    background-color: rgba(149, 170, 226, 0.1);
+}
+
+.container {
+    max-width: 1600px;
+    padding: 0 1rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+tr:hover {
+      background: radial-gradient(circle, rgb(26 204 114 / 12%) 26%, rgb(32 29 253 / 9%) 100%);
+}
+
+@keyframes fadeIn {
+    0% {opacity: 0.0;}
+    20% {opacity: 0.3;}
+    50% {opacity: 0.9;}
+    100% {opacity: 1;}
+}
+
+@keyframes fadeOut {
+    0% {opacity: 1;}
+    50% {opacity: 0.5;}
+    100% {opacity: 0.0;}
+}
+
+@keyframes fadeInOut {
+    0% {background-color: rgb(3 102 238 / 7%);}
+    50% {background-color: rgb(3 102 238 / 30%);}
+    100% {background-color: rgb(3 102 238 / 7%);}
+}
+
+.fadeIn {
+    animation: fadeIn 1s ease-in-out
+}
+
+.fadeOut {
+    animation: fadeOut 0.5s ease-in-out
+}
+
+.fadeInOut {
+    animation: fadeInOut 4s ease-in-out infinite
+}
+
+.info-label {
+    background: #ff000061;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.info-label-p {
+    color: #333;
+    padding: 0.2em;
+    padding-left: 1em;
+    vertical-align: middle;
+}

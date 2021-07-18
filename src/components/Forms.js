@@ -1,53 +1,42 @@
-import React, {Component} from 'react'
-import PropTypes from 'prop-types'
-import {Button} from './Buttons'
-import {authHeaderValue} from '../Settings' 
-import {hubRes, hubList} from '../Dataset'
+import React from 'react'
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress'
+import {HubSelect} from './HubSelect'
+import {labelAlertsTypes} from "./SnackBar"
+import {HubInfoCard} from "./HubInfoCard"
+import {HubOrderProportionGraphCard} from "./Graphics"
+import {hubRes, hubList} from "../DataSet"  // TODO
 
-
-const Options = (props) => {
-    const hubs = [
-      <option key='-1' value="">-------</option>,
-      ...props.hubs.map((hub, index) => <option key={index} value={hub.id}>{hub.name} (id={hub.id})</option>)
-    ]
-    return <select id="hubs" onChange={props.handleChange} >{hubs}</select>
-}
-
-
-export class HubForm extends Component {
+export class HubForm extends React.Component {
   state = {
     hubs: [],
     selectedHubId: null,
+    selectedHubData: null,
     buttonDisabled: true,
     buttonClickCount: 0
   }
 
   componentDidMount() {
-    const url = 'http://127.0.0.1:8000/Tms/v1/System/hub/'
-
-    const fetchParams = {
-      headers: {
-        Authorization: authHeaderValue
-      }
-    }
-    fetch(url, fetchParams)
-      .then((result) => hubList)
+    const url = '/hubs/'
+    fetch(url)
       .then((result) => {
-        this.setState({
-          hubs: result.hubs.map(
-              hub => {
-                return {id: hub.id, name: hub.name}
-              }
-          ),
-        })
-      }).catch(error => console.log(error))
+        if (!result.ok) {
+          this.props.raiseLabel("Нужна авторизация", 2000, labelAlertsTypes.ERROR)
+          // throw new Error()
+        }
+        return hubList
+      })
+      .then((result) => {
+        this.setState({hubs: result.hubs})
+      }).catch(error => error)
   }
 
-  handleFormChange = event => {
-    const value = event.target.value
+  handleFormChange = hub => {
     this.setState({
-      selectedHubId: value,
-      buttonDisabled: !value ? true : false
+      selectedHubId: hub.id,
+      selectedHubData: hub,
+      buttonDisabled: !hub.id
     })
   }
 
@@ -64,7 +53,7 @@ export class HubForm extends Component {
     const clickCount = this.updateButtonClicks()
     if (clickCount >= 2) {
       // It means the third click
-      this.props.raiseLabel("Прими таблетки!", 4000)
+      this.props.raiseLabel("Прими таблетки!", 4000, labelAlertsTypes.INFO)
       this.setState({buttonDisabled: true})
       setTimeout(() => this.setState({buttonDisabled: false}), 4000)
       return 
@@ -74,16 +63,11 @@ export class HubForm extends Component {
       return
     }
 
-    const url = `http://127.0.0.1:8000/Dashboard/table/${this.state.selectedHubId}/`
     this.setState({buttonDisabled: true})
-    
-    const fetchParams = {
-      headers: {
-        Authorization: authHeaderValue
-      }
-    }
-    fetch(url, fetchParams)
-      .then(result => this.state.selectedHubId === 1 ? hubRes : result.json())
+
+    const url = `/Dashboard/table/${this.state.selectedHubId}/`
+    fetch(url)
+      .then(result => hubRes)
       .then(result => this.props.setAppHubData(result))
       .catch(error => console.log(error))
       .finally(() => this.setState({buttonDisabled: false}))
@@ -91,22 +75,41 @@ export class HubForm extends Component {
 
   render() {
     const { hubs } = this.state;
-  
     return (
-      <div>
-        <form>
-          <label htmlFor="hubs">Выбор ТК:</label>
-          <Options hubs={hubs} handleChange={this.handleFormChange} />
-        </form>
-        <Button text='Запросить' onClick={this.requestHubInfo} isDisabled={this.state.buttonDisabled} />
-      </div>
-    );
+      <React.Fragment>
+        <Box display='flex' marginBottom={5} minHeight={200} maxHeight={200}>
+          {/* Block with the select, button and loader */}
+          <Box>
+            <Box marginBottom={1} marginTop={1}>
+              <HubSelect hubs={hubs} handleChange={this.handleFormChange} />
+            </Box>
+            <Box marginBottom={1} marginTop={1} display='flex'>
+              <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={this.requestHubInfo}
+                  disabled={this.state.buttonDisabled}
+              >
+                Запросить
+              </Button>
+              {(this.state.selectedHubId && this.state.buttonDisabled) ? <Progress/> : null}
+            </Box>
+          </Box>
+          {/* Block with the cards */}
+          <Box marginLeft={10} minHeight={170} display='flex'>
+            {this.state.selectedHubData ? <HubInfoCard hub={this.state.selectedHubData} /> :  null}
+            <Box marginLeft={5} >
+              {this.props.graphHubData ? <HubOrderProportionGraphCard graphHubData={this.props.graphHubData} /> :  null}
+            </Box>
+          </Box>
+      </Box>
+      </React.Fragment>
+    )
   }
 }
 
-
-Options.propTypes = {
-    handleChange: PropTypes.func.isRequired,
-    hubs: PropTypes.array,
-};
-
+const Progress = () => (
+    <Box marginLeft={5} paddingTop={0.5}>
+      <CircularProgress size={25} disableShrink/>
+    </Box>
+)

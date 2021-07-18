@@ -1,18 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 
+const greyButtonColor = {"background": "grey"}
 
 export const Button = (props) => {
-    const disabled = props.isDisabled || false
-    const greyButtonColor = {"background": "grey"}
     return(
         <button 
-            disabled={disabled} 
+            disabled={props.disabled}
             className={props.ButtonClassName || ""} 
             onClick={props.onClick}
-            style={disabled ? greyButtonColor: null}
+            style={props.disabled ? greyButtonColor: null}
         >
-            {props.text}
+            {props.children}
         </button>
     )
 }
@@ -21,6 +20,5 @@ export const Button = (props) => {
 Button.propTypes = {
     onClick: PropTypes.func.isRequired,
     ButtonClassName: PropTypes.string,
-    text: PropTypes.string.isRequired,
-    isDisabled: PropTypes.bool.isRequired
+    disabled: PropTypes.bool.isRequired
 };
