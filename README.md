@@ -11,3 +11,6 @@ Requests to backend are mocked with abstract data sets.
 
     - yarn
     - yarn start
+
+
+![Example](https://github.com/ZinBu/dashboard/raw/master/examples/dashboard.png)

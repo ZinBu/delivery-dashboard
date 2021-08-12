@@ -38,7 +38,7 @@ export const HubOrderProportionGraphCard = (props) => {
               <Pie
                 data={props.graphHubData}
                 cx={125}
-                cy={85}
+                cy={88}
                 innerRadius={40}
                 outerRadius={60}
                 fill="#8884d8"
