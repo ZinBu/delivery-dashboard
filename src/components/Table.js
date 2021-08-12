@@ -18,7 +18,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { ruRU } from '@material-ui/core/locale';
 import {OrderStatesChoice} from "../choices/Orders";
 
@@ -28,7 +28,7 @@ const orderStatuses = {
   [OrderStatesChoice.CANCELED]: <div title="Отменен"><CancelTwoToneIcon style={{ color: red[700] }} /></div>
 }
 
-const russianTheme = createMuiTheme({
+const russianTheme = createTheme({
     palette: {
         primary: { main: '#1976d2' },
       },
@@ -51,10 +51,10 @@ const useStyles = makeStyles({
 const setCourierData = order => {
       const taxiDriver = [
         `${order.provider || '-'}`,
-        `ID: ${order.claim_id || '-'}`,
-        `Авто: ${order.car_model || '-'}`,
-        `№: ${order.car_number || '-'}`,
-        `Статус: ${order.extra.provider_status || '-'}`
+        `ID: ${order.claimId || '-'}`,
+        `Авто: ${order.carModel || '-'}`,
+        `№: ${order.carNumber || '-'}`,
+        `Статус: ${order.extra.providerStatus || '-'}`
       ]
       return taxiDriver.map((el, index) => <div key={index}>{el}</div>)
 }
@@ -79,7 +79,7 @@ const Row = props => {
         <TableCell align="left">
             {
               order.isTaxi ? (
-                <Box>{order.provider}</Box>
+                <Box>Такси</Box>
               ) : (
                 <React.Fragment>
                   <Box>{order.courierName}</Box>
@@ -90,9 +90,9 @@ const Row = props => {
         </TableCell>
         <TableCell align="center">{order.complectationBegin}</TableCell>
         <TableCell align="center">{order.complectationEnd}</TableCell>
-        <TableCell align="center">{order.deliveringBegin}</TableCell>
+        <TableCell align="center">{order.deliveryBegin || '-'}</TableCell>
         <TableCell align="center">{order.clientArrivalTime}</TableCell>
-        <TableCell align="center">{order.deliveringEnd || '-'}</TableCell>
+        <TableCell align="center">{order.deliveryEnd || '-'}</TableCell>
         <TableCell align="center">{orderStatuses[order.state]}</TableCell>
       </TableRow>
       <TableRow>
@@ -171,8 +171,8 @@ const OrdersTable = props => {
             count={props.hubData.length}
             rowsPerPage={rowsPerPage}
             page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </ThemeProvider>
     </React.Fragment>

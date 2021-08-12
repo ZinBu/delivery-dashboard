@@ -6,6 +6,7 @@ import {HubSelect} from './HubSelect'
 import {labelAlertsTypes} from "./SnackBar"
 import {HubInfoCard} from "./HubInfoCard"
 import {HubOrderProportionGraphCard} from "./Graphics"
+import { hubRes, hubList } from '../DataSet';
 
 
 export class HubForm extends React.Component {
@@ -18,17 +19,18 @@ export class HubForm extends React.Component {
   }
 
   componentDidMount() {
-    const url = '/Tms/v1/System/hub/'
+    const url = '/api/hub/s'
+    // Mock reqeust
     fetch(url)
+      // .then((result) => {
+      //   if (!result.ok) {
+      //     this.props.raiseLabel("Нужна авторизация", 2000, labelAlertsTypes.ERROR)
+      //     throw new Error()
+      //   }
+      //   return result.json()
+      // })
       .then((result) => {
-        if (!result.ok) {
-          this.props.raiseLabel("Нужна авторизация", 2000, labelAlertsTypes.ERROR)
-          throw new Error()
-        }
-        return result.json()
-      })
-      .then((result) => {
-        this.setState({hubs: result.hubs})
+        this.setState({hubs: hubList.hubs})
       }).catch(error => error)
   }
 
@@ -65,10 +67,12 @@ export class HubForm extends React.Component {
 
     this.setState({buttonDisabled: true})
 
-    const url = `/Dashboard/table/${this.state.selectedHubId}/`
+    const url = `api/dashboard/${this.state.selectedHubId}/`
+    // Mock query
     fetch(url)
-      .then(result => result.json())
-      .then(result => this.props.setAppHubData(result))
+      // .then(result => result.json())
+      // .then(result => this.props.setAppHubData(result))
+      .then(result => this.props.setAppHubData(this.state.selectedHubId === 1 ? hubRes : []))
       .catch(error => console.log(error))
       .finally(() => this.setState({buttonDisabled: false}))
   }
