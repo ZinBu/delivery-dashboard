@@ -16,6 +16,9 @@ class App extends React.Component {
   }
 
   createHubGraphData = (hubData) => {
+    if (!hubData || hubData.length === 0) {
+        return
+    }
     let wip = 0
     let finished = 0
     let cancelled = 0

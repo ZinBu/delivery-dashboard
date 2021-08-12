@@ -6,7 +6,7 @@ import {HubSelect} from './HubSelect'
 import {labelAlertsTypes} from "./SnackBar"
 import {HubInfoCard} from "./HubInfoCard"
 import {HubOrderProportionGraphCard} from "./Graphics"
-import {hubRes, hubList} from "../DataSet"  // TODO
+
 
 export class HubForm extends React.Component {
   state = {
@@ -18,14 +18,14 @@ export class HubForm extends React.Component {
   }
 
   componentDidMount() {
-    const url = '/hubs/'
+    const url = '/Tms/v1/System/hub/'
     fetch(url)
       .then((result) => {
         if (!result.ok) {
           this.props.raiseLabel("Нужна авторизация", 2000, labelAlertsTypes.ERROR)
-          // throw new Error()
+          throw new Error()
         }
-        return hubList
+        return result.json()
       })
       .then((result) => {
         this.setState({hubs: result.hubs})
@@ -67,7 +67,7 @@ export class HubForm extends React.Component {
 
     const url = `/Dashboard/table/${this.state.selectedHubId}/`
     fetch(url)
-      .then(result => hubRes)
+      .then(result => result.json())
       .then(result => this.props.setAppHubData(result))
       .catch(error => console.log(error))
       .finally(() => this.setState({buttonDisabled: false}))

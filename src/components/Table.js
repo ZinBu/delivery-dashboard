@@ -20,11 +20,12 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { ruRU } from '@material-ui/core/locale';
+import {OrderStatesChoice} from "../choices/Orders";
 
 const orderStatuses = {
-  'WIP': <div style={{borderRadius: '5px'}} title="В работе.."><AccessTimeTwoToneIcon color="primary"/></div>,
-  'FINISHED': <div title="Завершен"><CheckCircleTwoToneIcon style={{ color: green[500] }} /></div>,
-  'CANCELED': <div title="Отменен"><CancelTwoToneIcon style={{ color: red[700] }} /></div>
+  [OrderStatesChoice.WIP]: <div style={{borderRadius: '5px'}} title="В работе.."><AccessTimeTwoToneIcon color="primary"/></div>,
+  [OrderStatesChoice.FINISHED]: <div title="Завершен"><CheckCircleTwoToneIcon style={{ color: green[500] }} /></div>,
+  [OrderStatesChoice.CANCELED]: <div title="Отменен"><CancelTwoToneIcon style={{ color: red[700] }} /></div>
 }
 
 const russianTheme = createMuiTheme({
@@ -76,12 +77,16 @@ const Row = props => {
         <TableCell align="center">{order.itemsCount}/{order.skuCount}</TableCell>
         <TableCell align="left"><div>{order.pickerName}</div><div>{order.pickerKpp}</div></TableCell>
         <TableCell align="left">
-            {order.isTaxi ? setCourierData(order) : (
+            {
+              order.isTaxi ? (
+                <Box>{order.provider}</Box>
+              ) : (
                 <React.Fragment>
                   <Box>{order.courierName}</Box>
                   <Box>{order.courierKpp}</Box>
                 </React.Fragment>
-              )}
+              )
+            }
         </TableCell>
         <TableCell align="center">{order.complectationBegin}</TableCell>
         <TableCell align="center">{order.complectationEnd}</TableCell>
@@ -97,30 +102,7 @@ const Row = props => {
               <Typography variant="h6" gutterBottom component="div">
                 Доп. информация
               </Typography>
-              {/*<Table size="small" aria-label="purchases">*/}
-              {/*  <TableHead>*/}
-              {/*    <TableRow>*/}
-              {/*      <TableCell>Date</TableCell>*/}
-              {/*      <TableCell>Customer</TableCell>*/}
-              {/*      <TableCell align="right">Amount</TableCell>*/}
-              {/*      <TableCell align="right">Total price ($)</TableCell>*/}
-              {/*    </TableRow>*/}
-              {/*  </TableHead>*/}
-              {/*  <TableBody>*/}
-              {/*    {order.history.map((historyRow) => (*/}
-              {/*      <TableRow key={historyRow.date}>*/}
-              {/*        <TableCell component="th" scope="row">*/}
-              {/*          {historyRow.date}*/}
-              {/*        </TableCell>*/}
-              {/*        <TableCell>{historyRow.customerId}</TableCell>*/}
-              {/*        <TableCell align="right">{historyRow.amount}</TableCell>*/}
-              {/*        <TableCell align="right">*/}
-              {/*          {Math.round(historyRow.amount * order.price * 100) / 100}*/}
-              {/*        </TableCell>*/}
-              {/*      </TableRow>*/}
-              {/*    ))}*/}
-              {/*  </TableBody>*/}
-              {/*</Table>*/}
+              {order.isTaxi ? setCourierData(order) : 'Пока тут пусто'}
             </Box>
           </Collapse>
         </TableCell>

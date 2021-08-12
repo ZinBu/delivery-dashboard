@@ -4,5 +4,5 @@ export const hubRes = [
 ]
 
 export const hubList = {
-    "hubs":[{"id":21,"name":"1312321", "windowOpen": "09:00", "windowClose": "22:00", "localTimezone": "Piska"}, {"id":1,"name":"рабочий"}]
+    "hubs":[{"id":21,"name":"1312321"}, {"id":1,"name":"рабочий"}]
 }
