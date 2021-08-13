@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  
+  # frontend-production:
+  #   restart: unless-stopped
+  #   build:
+  #     context: .
+  #     dockerfile: docker/frontend-prod/Dockerfile
+
+  fe_dev:
+    restart: "no"
+    build:
+      context: .
+      dockerfile: docker/frontend-dev/Dockerfile
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./:/app
+      - nodemodules:/app/node_modules
+    ports:
+      - '3000:3000'
+
+volumes:
+  nodemodules:

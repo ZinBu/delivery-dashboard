@@ -9,8 +9,12 @@ Requests to backend are mocked with abstract data sets.
 
 #### Start with:
 
-    - yarn
-    - yarn start
+    yarn
+    yarn start
+
+#### or 
+
+    docker-compose up -d --build
 
 
 ![Example](https://github.com/ZinBu/dashboard/raw/master/examples/dashboard.png)
