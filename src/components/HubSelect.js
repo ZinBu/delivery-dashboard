@@ -5,9 +5,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 
 export const HubSelect = (props) => {
-   const defaultOption = ""
    const labelName = 'Выбор ТК'
-   const [hub, setHub] = React.useState(defaultOption)
+   const [hub, setHub] = React.useState(null)
 
    const handleChange = (_, value) => {
        setHub(value)
