@@ -2,8 +2,9 @@ import React from 'react';
 import AccessTimeTwoToneIcon from '@material-ui/icons/AccessTimeTwoTone';
 import CheckCircleTwoToneIcon from '@material-ui/icons/CheckCircleTwoTone';
 import CancelTwoToneIcon from '@material-ui/icons/CancelTwoTone';
+import LocalTaxiOutlinedIcon from '@material-ui/icons/LocalTaxiOutlined';
 import { makeStyles } from '@material-ui/core/styles';
-import { green, red } from '@material-ui/core/colors'
+import { green, red, deepOrange } from '@material-ui/core/colors'
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
@@ -28,6 +29,8 @@ const orderStatuses = {
   [OrderStatesChoice.CANCELED]: <div title="Отменен"><CancelTwoToneIcon style={{ color: red[700] }} /></div>
 }
 
+const taxiIcon = <LocalTaxiOutlinedIcon style={{ color: deepOrange[500] }}/>
+
 const russianTheme = createTheme({
     palette: {
         primary: { main: '#1976d2' },
@@ -50,13 +53,13 @@ const useStyles = makeStyles({
 
 const setCourierData = order => {
       const taxiDriver = [
-        `${order.provider || '-'}`,
-        `ID: ${order.claimId || '-'}`,
-        `Авто: ${order.carModel || '-'}`,
-        `№: ${order.carNumber || '-'}`,
-        `Статус: ${order.extra.providerStatus || '-'}`
+        ['Такси', `${order.provider || '-'}`],
+        ['ID', `${order.claimId || '-'}`],
+        ['Авто', `${order.carModel || '-'}`],
+        ['№', `${order.carNumber || '-'}`],
+        ['Статус', `${order.extra.providerStatus || '-'}`]
       ]
-      return taxiDriver.map((el, index) => <div key={index}>{el}</div>)
+      return taxiDriver.map((el, index) => <div key={index}><b>{el[0]}</b>: {el[1]}</div>)
 }
 
 const Row = props => {
@@ -79,7 +82,7 @@ const Row = props => {
         <TableCell align="left">
             {
               order.isTaxi ? (
-                <Box>Такси</Box>
+                taxiIcon
               ) : (
                 <React.Fragment>
                   <Box>{order.courierName}</Box>
