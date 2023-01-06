@@ -22,9 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Alert = props => {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />;
 
 export default function SnackbarInfo(props) {
   const classes = useStyles();
@@ -45,23 +43,4 @@ export default function SnackbarInfo(props) {
       </Snackbar>
     </div>
   );
-}
-
-// Post old
-export function MUIInfoLabel(props) {
-  const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      <Alert  severity={props.labelType || labelAlertsTypes.INFO}>
-          {props.msg}
-      </Alert>
-    </div>
-  );
-}
-
-// Old label
-export const InfoLabel = (props) => {
-  const visibility = {"visibility": props.visible ? "visible" : "hidden"}
-  const cls = `info-label ${props.visible ? "fadeIn" : "fadeOut"}`
-  return <div className={cls} style={visibility}><p className="info-label-p">{props.text}</p></div>
 }

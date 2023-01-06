@@ -1,10 +1,7 @@
 import React from 'react';
-import AccessTimeTwoToneIcon from '@material-ui/icons/AccessTimeTwoTone';
-import CheckCircleTwoToneIcon from '@material-ui/icons/CheckCircleTwoTone';
-import CancelTwoToneIcon from '@material-ui/icons/CancelTwoTone';
 import LocalTaxiOutlinedIcon from '@material-ui/icons/LocalTaxiOutlined';
 import { makeStyles } from '@material-ui/core/styles';
-import { green, red, deepOrange } from '@material-ui/core/colors'
+import { deepOrange } from '@material-ui/core/colors'
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,23 +17,18 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import { ruRU } from '@material-ui/core/locale';
-import {OrderStatesChoice} from "../choices/Orders";
+import { enUS } from '@material-ui/core/locale';
+import { orderStatuses } from '../../../choices/Orders';
 
-const orderStatuses = {
-  [OrderStatesChoice.WIP]: <div style={{borderRadius: '5px'}} title="В работе.."><AccessTimeTwoToneIcon color="primary"/></div>,
-  [OrderStatesChoice.FINISHED]: <div title="Завершен"><CheckCircleTwoToneIcon style={{ color: green[500] }} /></div>,
-  [OrderStatesChoice.CANCELED]: <div title="Отменен"><CancelTwoToneIcon style={{ color: red[700] }} /></div>
-}
 
 const taxiIcon = <LocalTaxiOutlinedIcon style={{ color: deepOrange[500] }}/>
 
-const russianTheme = createTheme({
+const localizedTheme = createTheme({
     palette: {
         primary: { main: '#1976d2' },
       },
     },
-    ruRU
+    enUS
 );
 
 const useStyles = makeStyles({
@@ -51,13 +43,17 @@ const useStyles = makeStyles({
   },
 })
 
+const emptyTaxiParam = '-';
+
+const inflictTaxiField = field => `${field || emptyTaxiParam}`;
+
 const setCourierData = order => {
       const taxiDriver = [
-        ['Такси', `${order.provider || '-'}`],
-        ['ID', `${order.claimId || '-'}`],
-        ['Авто', `${order.carModel || '-'}`],
-        ['№', `${order.carNumber || '-'}`],
-        ['Статус', `${order.extra.providerStatus || '-'}`]
+        ['Taxi provider', inflictTaxiField(order.provider)],
+        ['ID', inflictTaxiField(order.claimId)],
+        ['Car model', inflictTaxiField(order.carModel)],
+        ['№', inflictTaxiField(order.carNumber)],
+        ['Status', `${order.extra ? order.extra.providerStatus : emptyTaxiParam}`]
       ]
       return taxiDriver.map((el, index) => <div key={index}><b>{el[0]}</b>: {el[1]}</div>)
 }
@@ -93,9 +89,9 @@ const Row = props => {
         </TableCell>
         <TableCell align="center">{order.complectationBegin}</TableCell>
         <TableCell align="center">{order.complectationEnd}</TableCell>
-        <TableCell align="center">{order.deliveryBegin || '-'}</TableCell>
+        <TableCell align="center">{order.deliveringBegin}</TableCell>
         <TableCell align="center">{order.clientArrivalTime}</TableCell>
-        <TableCell align="center">{order.deliveryEnd || '-'}</TableCell>
+        <TableCell align="center">{order.deliveringEnd || '-'}</TableCell>
         <TableCell align="center">{orderStatuses[order.state]}</TableCell>
       </TableRow>
       <TableRow>
@@ -103,9 +99,9 @@ const Row = props => {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
-                Доп. информация
+                Extra information
               </Typography>
-              {order.isTaxi ? setCourierData(order) : 'Пока тут пусто'}
+              {order.isTaxi ? setCourierData(order) : 'Nothing here yet'}
             </Box>
           </Collapse>
         </TableCell>
@@ -120,17 +116,17 @@ const TableHeader = () => {
       <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Номер заказа</TableCell>
-            <TableCell align="center">Вес корзины (кг)</TableCell>
-            <TableCell align="center">Штук/SKU</TableCell>
-            <TableCell align="center">Пикер/КПП</TableCell>
-            <TableCell align="center">Курьер/КПП</TableCell>
-            <TableCell align="center">Начало сборки</TableCell>
-            <TableCell align="center">Конец сборки</TableCell>
-            <TableCell align="center">Время выхода курьера</TableCell>
-            <TableCell align="center">Время доставки клиенту</TableCell>
-            <TableCell align="center">Время возвращения курьера</TableCell>
-            <TableCell align="center">Статус</TableCell>
+            <TableCell>Order's number</TableCell>
+            <TableCell align="center">Weight (kg)</TableCell>
+            <TableCell align="center">Items/SKU</TableCell>
+            <TableCell align="center">Picker/№</TableCell>
+            <TableCell align="center">Courier/№</TableCell>
+            <TableCell align="center">Assemble start</TableCell>
+            <TableCell align="center">Assemble end</TableCell>
+            <TableCell align="center">Delivery start</TableCell>
+            <TableCell align="center">Client arrival</TableCell>
+            <TableCell align="center">Delivery end</TableCell>
+            <TableCell align="center">Status</TableCell>
           </TableRow>
         </TableHead>
     )
@@ -153,7 +149,7 @@ const OrdersTable = props => {
 
   return (
     <React.Fragment>
-      <ThemeProvider theme={russianTheme}>
+      <ThemeProvider theme={localizedTheme}>
         <TableContainer component={Paper}  className={classes.container}>
           <Table aria-label="collapsible table" stickyHeader>
             <TableHeader />

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
+const labelName = 'Choose Hub'
 
 export const HubSelect = (props) => {
-   const labelName = 'Выбор ТК'
    const [hub, setHub] = React.useState(null)
 
    const handleChange = (_, value) => {

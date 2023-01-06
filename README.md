@@ -16,5 +16,8 @@ Requests to backend are mocked with abstract data sets.
 
     docker-compose up -d --build
 
+### Examples
 
-![Example](https://github.com/ZinBu/delivery-dashboard/blob/main/examples/dashboard.png)
+![Example1](https://github.com/ZinBu/delivery-dashboard/blob/main/examples/dashboard1.png)
+![Example1](https://github.com/ZinBu/delivery-dashboard/blob/main/examples/dashboard2.png)
+![Example1](https://github.com/ZinBu/delivery-dashboard/blob/main/examples/dashboard2_1.png)
