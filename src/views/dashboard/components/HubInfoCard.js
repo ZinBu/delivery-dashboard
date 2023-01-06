@@ -37,10 +37,10 @@ export const HubInfoCard = (props) => {
                     </Box>
                 </Box>
                 <Typography className={classes.body} gutterBottom>
-                    Часы работы: {props.hub.windowOpen} - {props.hub.windowClose}
+                    Working hours: {props.hub.windowOpen} - {props.hub.windowClose}
                 </Typography>
                 <Typography className={classes.body} gutterBottom>
-                    Часовой пояс: {props.hub.localTimezone}
+                    Timezone: {props.hub.localTimezone}
                 </Typography>
             </CardContent>
         </Card>

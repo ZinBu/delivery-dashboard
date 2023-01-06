@@ -4,40 +4,33 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {HubSelect} from './HubSelect'
 import {labelAlertsTypes} from "./SnackBar"
-import {HubInfoCard} from "./HubInfoCard"
-import {HubOrderProportionGraphCard} from "./Graphics"
-import { hubRes, hubList } from '../DataSet';
+import {requestHubs} from "../tools/Hub";
+import {messages} from "../choices/Extra";
 
 
 export class HubForm extends React.Component {
   state = {
     hubs: [],
     selectedHubId: null,
-    selectedHubData: null,
     buttonDisabled: true,
     buttonClickCount: 0
   }
 
   componentDidMount() {
-    const url = '/api/hub/s'
-    // Mock reqeust
-    fetch(url)
-      // .then((result) => {
-      //   if (!result.ok) {
-      //     this.props.raiseLabel("Нужна авторизация", 2000, labelAlertsTypes.ERROR)
-      //     throw new Error()
-      //   }
-      //   return result.json()
-      // })
-      .then((result) => {
-        this.setState({hubs: hubList.hubs})
-      }).catch(error => error)
+    requestHubs((result) => this.setState({hubs: result.hubs}));
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.buttonClickTimeoutOne);
+    clearTimeout(this.buttonClickTimeoutTwo);
+    clearInterval(this.intervalQuery);
   }
 
   handleFormChange = hub => {
+    // Set selected hub data to a parent
+    this.props.setHubSelect(hub)
     this.setState({
       selectedHubId: hub.id,
-      selectedHubData: hub,
       buttonDisabled: !hub.id
     })
   }
@@ -45,7 +38,7 @@ export class HubForm extends React.Component {
   updateButtonClicks = () => {
     // Check clicks count in a row for a 3 second interval
     if (this.state.buttonClickCount === 0) {
-      setTimeout(() => this.setState({buttonClickCount: 0}), 3000)
+      this.buttonClickTimeoutOne = setTimeout(() => this.setState({buttonClickCount: 0}), 3000)
     }
     this.setState({buttonClickCount: this.state.buttonClickCount + 1})
     return this.state.buttonClickCount
@@ -55,9 +48,9 @@ export class HubForm extends React.Component {
     const clickCount = this.updateButtonClicks()
     if (clickCount >= 2) {
       // It means the third click
-      this.props.raiseLabel("Прими таблетки!", 4000, labelAlertsTypes.INFO)
+      this.props.raiseLabel(messages.indignation, 4000, labelAlertsTypes.INFO)
       this.setState({buttonDisabled: true})
-      setTimeout(() => this.setState({buttonDisabled: false}), 4000)
+      this.buttonClickTimeoutTwo = setTimeout(() => this.setState({buttonDisabled: false}), 4000)
       return 
     }
 
@@ -66,23 +59,18 @@ export class HubForm extends React.Component {
     }
 
     this.setState({buttonDisabled: true})
-
-    const url = `api/dashboard/${this.state.selectedHubId}/`
-    // Mock query
-    fetch(url)
-      // .then(result => result.json())
-      // .then(result => this.props.setAppHubData(result))
-      .then(result => this.props.setAppHubData(this.state.selectedHubId === 1 ? hubRes : []))
-      .catch(error => console.log(error))
-      .finally(() => this.setState({buttonDisabled: false}))
+    this.props.queryOnClick(() => this.setState({buttonDisabled: false}))
+    // Create interval event for this query function start. 
+    // But only in a case if it doesn't exist yet. 
+    if (this.props.requestPeriod && !this.intervalQuery) {
+      this.intervalQuery = setInterval(this.requestHubInfo, this.props.requestPeriod);
+    }
   }
 
   render() {
     const { hubs } = this.state;
     return (
       <React.Fragment>
-        <Box display='flex' marginBottom={5} minHeight={200} maxHeight={200}>
-          {/* Block with the select, button and loader */}
           <Box>
             <Box marginBottom={1} marginTop={1}>
               <HubSelect hubs={hubs} handleChange={this.handleFormChange} />
@@ -94,19 +82,11 @@ export class HubForm extends React.Component {
                   onClick={this.requestHubInfo}
                   disabled={this.state.buttonDisabled}
               >
-                Запросить
+                Request
               </Button>
               {(this.state.selectedHubId && this.state.buttonDisabled) ? <Progress/> : null}
             </Box>
           </Box>
-          {/* Block with the cards */}
-          <Box marginLeft={10} minHeight={170} display='flex'>
-            {this.state.selectedHubData ? <HubInfoCard hub={this.state.selectedHubData} /> :  null}
-            <Box marginLeft={5} >
-              {this.props.graphHubData ? <HubOrderProportionGraphCard graphHubData={this.props.graphHubData} /> :  null}
-            </Box>
-          </Box>
-      </Box>
       </React.Fragment>
     )
   }

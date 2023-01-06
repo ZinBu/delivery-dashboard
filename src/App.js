@@ -1,88 +1,53 @@
-import React from 'react'
-import Container from '@material-ui/core/Container'
-import {Header} from './components/Static'
-import {HubForm} from './components/Forms'
-import OrdersTable from "./components/Table"
-import SnackbarInfo, {labelAlertsTypes} from "./components/SnackBar"
-import {OrderStatesChoice} from "./choices/Orders"
+import React from 'react';
+import Dashboard from './views/dashboard/Dashboard';
+import PersistentDrawerLeft from './Sidebar';
+import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
+import TimelapseOutlinedIcon from '@material-ui/icons/TimelapseOutlined';
+import { Timetable } from "./views/timetable/Timetable";
+import SnackbarInfo, {labelAlertsTypes} from "./components/SnackBar";
 
-class App extends React.Component {
-  state = {
-      hubData: [],
-      graphHubData: null,
-      labelText: null,
-      labelVisible: false,
-      labelAlertType: labelAlertsTypes.INFO
-  }
+const App = () => {
+    const [labelText, setLabelText] = React.useState(null);
+    const [labelVisible, setLabelVisible] = React.useState(false);
+    const [labelAlertType, setLabelAlertType] = React.useState(labelAlertsTypes.INFO);
 
-  createHubGraphData = (hubData) => {
-    if (!hubData || hubData.length === 0) {
-        return
+    const raiseLabel = (text, showTime=2000, labelType=labelAlertsTypes.INFO) => {
+      setLabelText(text);
+      setLabelVisible(true);
+      setLabelAlertType(labelType);
+      setTimeout(() => setLabelVisible(false), showTime)
     }
-    let wip = 0
-    let finished = 0
-    let cancelled = 0
-    for (let i = 0; i < hubData.length; i++) {
-        switch (hubData[i].state) {
-            case OrderStatesChoice.WIP:
-                wip++
-                break
-            case OrderStatesChoice.FINISHED:
-                finished++
-                break
-            case OrderStatesChoice.CANCELED:
-                cancelled++
-                break
-            default:
-                console.warn('Unexpected status')
-        }
-    }
-    return [
-      { state: OrderStatesChoice.WIP, value: wip },
-      { state: OrderStatesChoice.FINISHED, value: finished },
-      { state: OrderStatesChoice.CANCELED, value: cancelled },
-  ]
-  }
 
-  setHubData = (hubData) => {
-    this.setState({
-        hubData: hubData,
-        graphHubData: this.createHubGraphData(hubData)
-    })
-    if (!hubData || hubData.length < 1) {
-      this.raiseLabel("Нет данных!", 2000, labelAlertsTypes.WARNING)
-    }
-  }
+    const routes = [
+      {
+          component: <Dashboard raiseLabel={raiseLabel} />,
+          link: '/superdash',
+          panel: {
+              name: 'Dashboard', 
+              icon: <DashboardOutlinedIcon />
+          },
+      },
+      {
+          component: <Timetable raiseLabel={raiseLabel} />,
+          link: '/timetable',
+          panel: {
+              name: 'Timetable',
+              icon: <TimelapseOutlinedIcon />
+          }
+      }
+    ]
 
-  raiseLabel = (text, showTime=2000, labelType=labelAlertsTypes.INFO) => {
-    this.setState({labelText: text, labelVisible: true, labelType: labelType})
-    setTimeout(() => this.setState({labelVisible: false}), showTime)
-  }
-
-  render() {
-      const visibleTable = this.state.hubData.length < 1
-      return (
-        <Container maxWidth="xl">
-          <Header>Дашборд</Header>
-          {/*<Box marginBottom={5} height={30}>*/}
-          {/*    {this.state.labelVisible ? <MUIInfoLabel msg={this.state.labelText}/> : null}*/}
-          {/*</Box>*/}
-
-          <SnackbarInfo
-                msg={this.state.labelText}
-                labelVisible={this.state.labelVisible}
-                labelType={this.state.labelType}
-                makeInvisible={() => this.setState({labelVisible: false})}
-          />
-          <HubForm
-              setAppHubData={this.setHubData}
-              raiseLabel={this.raiseLabel}
-              graphHubData={this.state.graphHubData}
-          />
-        {visibleTable ? null : <OrdersTable hubData={this.state.hubData}/>}
-        </Container>
-      )
-  }
+    return (
+      <>
+        <PersistentDrawerLeft routes={routes} />
+        <SnackbarInfo
+            msg={labelText}
+            labelVisible={labelVisible}
+            labelType={labelAlertType}
+            makeInvisible={() => setLabelVisible(false)}
+        />
+    </>
+    )
 }
 
 export default App

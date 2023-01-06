@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import { PieChart, Pie, Cell } from "recharts"
-import {OrderStatesChoice} from "../choices/Orders";
-
+import { OrderStatesChoice } from "../../../choices/Orders";
 
 const COLORS = {
     [OrderStatesChoice.WIP]: "#1976d2c2",
@@ -38,7 +37,7 @@ export const HubOrderProportionGraphCard = (props) => {
               <Pie
                 data={props.graphHubData}
                 cx={125}
-                cy={88}
+                cy={85}
                 innerRadius={40}
                 outerRadius={60}
                 fill="#8884d8"

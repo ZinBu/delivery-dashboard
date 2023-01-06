@@ -4,15 +4,22 @@
   "proxy": "http://api:80",
   "private": true,
   "dependencies": {
+    "@date-io/moment": "1.x",
     "@fontsource/roboto": "^4.5.0",
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
+    "@material-ui/pickers": "^3.3.10",
+    "interactjs": "^1.10.11",
+    "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
+    "react-calendar-timeline": "^0.27.0",
     "react-dom": "^17.0.2",
+    "react-router-dom": "6",
     "react-scripts": "4.0.3",
     "recharts": "^2.0.10"
+
   },
   "devDependencies": {},
   "scripts": {
